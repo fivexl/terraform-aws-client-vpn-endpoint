@@ -4,6 +4,24 @@ AWS Client VPN endpoint
 ## Info
 - [AWS Client VPN pricing](https://aws.amazon.com/vpn/pricing/)
 
+## How to create Application for VPN in AWS Single Sign-On
+- Open AWS SSO service page. Select Applications from the sidebar
+- Choose Add a new application
+- Select Add a custom SAML 2.0 application
+- Fill Display name and Description
+- Set session duration (VPN session duration) - 12h
+- Select "If you don't have a metadata file, you can manually type your metadata values."
+- Application ACS URL: http://127.0.0.1:35001
+- Application SAML audience: urn:amazon:webservices:clientvpn
+- Save changes
+- Download AWS SSO SAML metadata file (file for vpn secret)
+- Select tab "Attribute mappings":
+    - Subject -> ${user:subject} -> emailAddress
+    - NameID -> ${user:email} -> basic
+    - memberOf -> ${user:groups} -> unspecified
+- Select tab "Assigned users"
+- Assign users or groups created on previous step
+
 ## Example
 
 ```hcl 
