@@ -46,6 +46,79 @@ module "vpn" {
 
 ```
 
+## Example with VPC module
+```hcl
+variable "vpn_access_public" {
+  description = "List of SSO Group IDs for accessing public subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpn_access_private" {
+  description = "List of SSO Group IDs for accessing private subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpn_access_intra" {
+  description = "List of SSO Group IDs for accessing intra subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpn_access_db" {
+  description = "List of SSO Group IDs for accessing db subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpn_access_elasticache" {
+  description = "List of SSO Group IDs for accessing elasticache subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpn_access_all" {
+  description = "List of SSO Group IDs for accessing all subnets"
+  type        = list(string)
+  default     = []
+}
+
+locals {
+  vpn_authorization_rules_public      = { for item in setproduct(module.vpc.public_subnets_cidr_blocks, var.vpn_access_public) : "public_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules_private     = { for item in setproduct(module.vpc.private_subnets_cidr_blocks, var.vpn_access_private) : "private_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules_intra       = { for item in setproduct(module.vpc.intra_subnets_cidr_blocks, var.vpn_access_intra) : "intra_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules_db          = { for item in setproduct(module.vpc.database_subnets_cidr_blocks, var.vpn_access_db) : "db_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules_elasticache = { for item in setproduct(module.vpc.elasticache_subnets_cidr_blocks, var.vpn_access_elasticache) : "elasticache_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  all_subnets_cidr_blocks             = concat(module.vpc.public_subnets_cidr_blocks, module.vpc.private_subnets_cidr_blocks, module.vpc.intra_subnets_cidr_blocks, module.vpc.database_subnets_cidr_blocks, module.vpc.elasticache_subnets_cidr_blocks)
+  vpn_authorization_rules_all         = { for item in setproduct(local.all_subnets_cidr_blocks, var.vpn_access_all) : "all_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules = merge(
+    local.vpn_authorization_rules_public,
+    local.vpn_authorization_rules_private,
+    local.vpn_authorization_rules_intra,
+    local.vpn_authorization_rules_db,
+    local.vpn_authorization_rules_elasticache,
+    local.vpn_authorization_rules_all
+  )
+}
+
+module "vpn" {
+  source                     = "fivexl/client-vpn-endpoint/aws"
+  endpoint_name              = "myvpn"
+  endpoint_client_cidr_block = "10.100.0.0/16"
+  endpoint_subnets           = [module.vpc.intra_subnets[0]] # Attach VPN to single subnet. Reduce cost
+  endpoint_vpc_id            = module.vpc.vpc_id
+  tls_subject_common_name    = "int.example.com"
+  saml_provider_arn          = data.aws_ssm_parameter.iam_vpn_saml_provider_arn.value
+
+  authorization_rules = local.vpn_authorization_rules
+
+  authorization_rules_all_groups = {}
+
+  tags = var.tags
+}
+```
+
 ## Requirements
 
 | Name | Version |
