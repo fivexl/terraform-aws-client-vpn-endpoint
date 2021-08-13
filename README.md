@@ -102,14 +102,16 @@ variable "vpn_access_all" {
   default     = []
 }
 
+# https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/limits.html
+# Authorization rules per Client VPN endpoint defaul quota is 50
+# https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas/L-9A1BC94B
 locals {
   vpn_authorization_rules_public      = { for item in setproduct(module.vpc.public_subnets_cidr_blocks, var.vpn_access_public) : "public_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
   vpn_authorization_rules_private     = { for item in setproduct(module.vpc.private_subnets_cidr_blocks, var.vpn_access_private) : "private_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
   vpn_authorization_rules_intra       = { for item in setproduct(module.vpc.intra_subnets_cidr_blocks, var.vpn_access_intra) : "intra_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
   vpn_authorization_rules_db          = { for item in setproduct(module.vpc.database_subnets_cidr_blocks, var.vpn_access_db) : "db_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
   vpn_authorization_rules_elasticache = { for item in setproduct(module.vpc.elasticache_subnets_cidr_blocks, var.vpn_access_elasticache) : "elasticache_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
-  all_subnets_cidr_blocks             = concat(module.vpc.public_subnets_cidr_blocks, module.vpc.private_subnets_cidr_blocks, module.vpc.intra_subnets_cidr_blocks, module.vpc.database_subnets_cidr_blocks, module.vpc.elasticache_subnets_cidr_blocks)
-  vpn_authorization_rules_all         = { for item in setproduct(local.all_subnets_cidr_blocks, var.vpn_access_all) : "all_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
+  vpn_authorization_rules_all         = { for item in setproduct([module.vpc.vpc_cidr_block], var.vpn_access_all) : "all_${item[0]}_${item[1]}" => "${item[0]},${item[1]}" }
   vpn_authorization_rules = merge(
     local.vpn_authorization_rules_public,
     local.vpn_authorization_rules_private,
