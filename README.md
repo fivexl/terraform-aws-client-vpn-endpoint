@@ -40,7 +40,7 @@ data "aws_secretsmanager_secret_version" "saml" {
 }
 
 resource "aws_iam_saml_provider" "vpn" {
-  name                   = var.vpn_saml_provider_name # could be anything
+  name                   = var.vpn_saml_provider_name # could be anything that satisfy regular expression pattern: [\w._-]+ 
   saml_metadata_document = base64decode(jsondecode(data.aws_secretsmanager_secret_version.saml.secret_string)["saml_metadata_xml"]) # saml_metadata_xml
   tags                   = var.tags
 }
