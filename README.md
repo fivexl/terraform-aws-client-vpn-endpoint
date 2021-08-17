@@ -50,12 +50,15 @@ module "vpn" {
   endpoint_name              = "myvpn"
   endpoint_client_cidr_block = "10.100.0.0/16"
   endpoint_subnets           = [module.vpc.intra_subnets[0]] # Attach VPN to single subnet. Reduce cost
-  additional_routes          = { module.vpc.intra_subnets[0] = "172.16.0.0/24" }
   endpoint_vpc_id            = module.vpc.vpc_id
   tls_subject_common_name    = "int.example.com"
   saml_provider_arn          = aws_iam_saml_provider.vpn.arn
 
   authorization_rules = {}
+
+  additional_routes = {
+    "${module.vpc.intra_subnets[0]}" = "172.16.0.0/24"
+  }
 
   authorization_rules_all_groups = {
     full_access_private_subnet_0 = module.vpc.private_subnets_cidr_blocks[0]
