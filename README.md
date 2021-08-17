@@ -50,6 +50,7 @@ module "vpn" {
   endpoint_name              = "myvpn"
   endpoint_client_cidr_block = "10.100.0.0/16"
   endpoint_subnets           = [module.vpc.intra_subnets[0]] # Attach VPN to single subnet. Reduce cost
+  additional_routes          = { module.vpc.intra_subnets[0] = "172.16.0.0/24" }
   endpoint_vpc_id            = module.vpc.vpc_id
   tls_subject_common_name    = "int.example.com"
   saml_provider_arn          = aws_iam_saml_provider.vpn.arn
@@ -169,6 +170,7 @@ No modules.
 | [aws_ec2_client_vpn_authorization_rule.this_sso_to_dns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_authorization_rule) | resource |
 | [aws_ec2_client_vpn_endpoint.this_sso](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_endpoint) | resource |
 | [aws_ec2_client_vpn_network_association.this_sso](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_network_association) | resource |
+| [aws_ec2_client_vpn_route.this_sso](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_client_vpn_route) | resource |
 | [aws_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [tls_private_key.this](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
 | [tls_self_signed_cert.this](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert) | resource |
