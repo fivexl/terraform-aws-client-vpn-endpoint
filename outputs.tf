@@ -21,3 +21,11 @@ output "ec2_client_vpn_endpoint_id" {
 output "ec2_client_vpn_endpoint_arn" {
   value = aws_ec2_client_vpn_endpoint.this_sso.arn
 }
+
+output "ec2_client_vpn_endpoint_id" {
+  value = aws_ec2_client_vpn_endpoint.this_sso.id
+}
+
+output "ec2_client_vpn_network_associations" {
+  value = aws_ec2_client_vpn_network_association.this_sso
+}

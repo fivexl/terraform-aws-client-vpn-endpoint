@@ -62,7 +62,6 @@ module "vpn" {
 
   tags = var.tags
 }
-
 ```
 
 ## Example with VPC module
