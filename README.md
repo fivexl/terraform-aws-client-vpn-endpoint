@@ -183,6 +183,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_additional_routes"></a> [additional\_routes](#input\_additional\_routes) | A map where the key is a subnet ID of endpoint subnet for network association and value is a cidr to where traffic should be routed from that subnet. Useful in cases if you need to route beyond the VPC subnet, for instance peered VPC | `map(string)` | `{}` | no |
 | <a name="input_authorization_rules"></a> [authorization\_rules](#input\_authorization\_rules) | Map containing authorization rule configuration. rule\_name = "target\_network\_cidr, access\_group\_id" . | `map(string)` | `{}` | no |
 | <a name="input_authorization_rules_all_groups"></a> [authorization\_rules\_all\_groups](#input\_authorization\_rules\_all\_groups) | Map containing authorization rule configuration with authorize\_all\_groups=true. rule\_name = "target\_network\_cidr" . | `map(string)` | `{}` | no |
 | <a name="input_cloudwatch_log_group_name_prefix"></a> [cloudwatch\_log\_group\_name\_prefix](#input\_cloudwatch\_log\_group\_name\_prefix) | Specifies the name prefix of CloudWatch Log Group for VPC flow logs. | `string` | `"/aws/client-vpn-endpoint/"` | no |
@@ -200,6 +201,9 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_ec2_client_vpn_endpoint_arn"></a> [ec2\_client\_vpn\_endpoint\_arn](#output\_ec2\_client\_vpn\_endpoint\_arn) | n/a |
+| <a name="output_ec2_client_vpn_endpoint_id"></a> [ec2\_client\_vpn\_endpoint\_id](#output\_ec2\_client\_vpn\_endpoint\_id) | n/a |
+| <a name="output_ec2_client_vpn_network_associations"></a> [ec2\_client\_vpn\_network\_associations](#output\_ec2\_client\_vpn\_network\_associations) | n/a |
 | <a name="output_security_group_description"></a> [security\_group\_description](#output\_security\_group\_description) | n/a |
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
 | <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | n/a |
