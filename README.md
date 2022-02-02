@@ -143,6 +143,7 @@ module "vpn" {
 }
 ```
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -188,6 +189,8 @@ No modules.
 | <a name="input_authorization_rules_all_groups"></a> [authorization\_rules\_all\_groups](#input\_authorization\_rules\_all\_groups) | Map containing authorization rule configuration with authorize\_all\_groups=true. rule\_name = "target\_network\_cidr" . | `map(string)` | `{}` | no |
 | <a name="input_cloudwatch_log_group_name_prefix"></a> [cloudwatch\_log\_group\_name\_prefix](#input\_cloudwatch\_log\_group\_name\_prefix) | Specifies the name prefix of CloudWatch Log Group for VPC flow logs. | `string` | `"/aws/client-vpn-endpoint/"` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | Specifies the number of days you want to retain log events in the specified log group for VPN connection logs. | `number` | `30` | no |
+| <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS servers to be used for DNS resolution. A Client VPN endpoint can have up to two DNS servers. If no DNS server is specified, the DNS address of the connecting device is used. Conflict with `use_vpc_internal_dns` | `list(string)` | `[]` | no |
+| <a name="input_enable_split_tunnel"></a> [enable\_split\_tunnel](#input\_enable\_split\_tunnel) | Indicates whether split-tunnel is enabled on VPN endpoint | `bool` | `true` | no |
 | <a name="input_endpoint_client_cidr_block"></a> [endpoint\_client\_cidr\_block](#input\_endpoint\_client\_cidr\_block) | The IPv4 address range, in CIDR notation, from which to assign client IP addresses. The address range cannot overlap with the local CIDR of the VPC in which the associated subnet is located, or the routes that you add manually. The address range cannot be changed after the Client VPN endpoint has been created. The CIDR block should be /22 or greater. | `string` | `"10.100.100.0/24"` | no |
 | <a name="input_endpoint_name"></a> [endpoint\_name](#input\_endpoint\_name) | Name to be used on the Client VPN Endpoint | `string` | n/a | yes |
 | <a name="input_endpoint_subnets"></a> [endpoint\_subnets](#input\_endpoint\_subnets) | List of IDs of endpoint subnets for network association | `list(string)` | n/a | yes |
@@ -196,6 +199,8 @@ No modules.
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 | <a name="input_tls_subject_common_name"></a> [tls\_subject\_common\_name](#input\_tls\_subject\_common\_name) | The common\_name for subject for which a certificate is being requested. RFC5280. | `string` | n/a | yes |
 | <a name="input_tls_validity_period_hours"></a> [tls\_validity\_period\_hours](#input\_tls\_validity\_period\_hours) | Specifies the number of hours after initial issuing that the certificate will become invalid. | `number` | `47400` | no |
+| <a name="input_transport_protocol"></a> [transport\_protocol](#input\_transport\_protocol) | The transport protocol to be used by the VPN session. | `string` | `"udp"` | no |
+| <a name="input_use_vpc_internal_dns"></a> [use\_vpc\_internal\_dns](#input\_use\_vpc\_internal\_dns) | Use VPC Internal DNS as is DNS servers | `bool` | `true` | no |
 
 ## Outputs
 
@@ -208,3 +213,4 @@ No modules.
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
 | <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | n/a |
 | <a name="output_security_group_vpc_id"></a> [security\_group\_vpc\_id](#output\_security\_group\_vpc\_id) | n/a |
+<!-- END_TF_DOCS -->
