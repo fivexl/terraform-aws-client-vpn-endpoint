@@ -71,3 +71,26 @@ variable "tls_validity_period_hours" {
   default     = 47400
 }
 
+variable "enable_split_tunnel" {
+  description = "Indicates whether split-tunnel is enabled on VPN endpoint"
+  type        = bool
+  default     = true
+}
+
+variable "transport_protocol" {
+  description = "The transport protocol to be used by the VPN session."
+  type        = string
+  default     = "udp"
+}
+
+variable "use_vpc_internal_dns" {
+  description = "Use VPC Internal DNS as is DNS servers"
+  type        = bool
+  default     = true
+}
+
+variable "dns_servers" {
+  type        = list(string)
+  description = "DNS servers to be used for DNS resolution. A Client VPN endpoint can have up to two DNS servers. If no DNS server is specified, the DNS address of the connecting device is used. Conflict with `use_vpc_internal_dns`"
+  default     = []
+}

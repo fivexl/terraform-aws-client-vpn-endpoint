@@ -52,9 +52,9 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   description            = var.endpoint_name
   server_certificate_arn = aws_acm_certificate.this.arn
   client_cidr_block      = var.endpoint_client_cidr_block
-  split_tunnel           = true
-  transport_protocol     = "udp"
-  dns_servers            = [cidrhost(data.aws_vpc.this.cidr_block, 2)]
+  split_tunnel           = var.enable_split_tunnel
+  transport_protocol     = var.transport_protocol
+  dns_servers            = var.use_vpc_internal_dns ? [cidrhost(data.aws_vpc.this.cidr_block, 2)] : var.dns_servers
   authentication_options {
     type              = "federated-authentication"
     saml_provider_arn = var.saml_provider_arn
@@ -93,6 +93,7 @@ resource "aws_ec2_client_vpn_network_association" "this_sso" {
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_sso_to_dns" {
+  count                  = var.use_vpc_internal_dns ? 1 : 0
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
   target_network_cidr    = "${cidrhost(data.aws_vpc.this.cidr_block, 2)}/32"
   authorize_all_groups   = true
