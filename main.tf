@@ -48,6 +48,19 @@ resource "aws_cloudwatch_log_stream" "this" {
   name           = "connection-log"
 }
 
+resource "aws_security_group" "this" {
+  name        = "client-vpn-endpoint-${var.endpoint_name}"
+  description = "Egress All. Used for other groups where VPN access is required. "
+  vpc_id      = var.endpoint_vpc_id
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = var.tags
+}
+
 resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   description            = var.endpoint_name
   server_certificate_arn = aws_acm_certificate.this.arn
@@ -55,6 +68,7 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   split_tunnel           = var.enable_split_tunnel
   transport_protocol     = var.transport_protocol
   dns_servers            = var.use_vpc_internal_dns ? [cidrhost(data.aws_vpc.this.cidr_block, 2)] : var.dns_servers
+  security_groups_ids    = [aws_security_group.this.id]
   authentication_options {
     type              = "federated-authentication"
     saml_provider_arn = var.saml_provider_arn
@@ -72,24 +86,10 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   )
 }
 
-resource "aws_security_group" "this" {
-  name        = "client-vpn-endpoint-${var.endpoint_name}"
-  description = "Egress All. Used for other groups where VPN access is required. "
-  vpc_id      = var.endpoint_vpc_id
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = var.tags
-}
-
 resource "aws_ec2_client_vpn_network_association" "this_sso" {
   for_each               = toset(var.endpoint_subnets)
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
   subnet_id              = each.value
-  security_groups        = [aws_security_group.this.id]
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_sso_to_dns" {
