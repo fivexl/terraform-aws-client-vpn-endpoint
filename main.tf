@@ -68,7 +68,7 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   split_tunnel           = var.enable_split_tunnel
   transport_protocol     = var.transport_protocol
   dns_servers            = var.use_vpc_internal_dns ? [cidrhost(data.aws_vpc.this.cidr_block, 2)] : var.dns_servers
-  security_groups_ids    = [aws_security_group.this.id]
+  security_group_ids     = [aws_security_group.this.id]
   authentication_options {
     type              = "federated-authentication"
     saml_provider_arn = var.saml_provider_arn
