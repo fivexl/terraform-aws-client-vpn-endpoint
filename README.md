@@ -198,13 +198,14 @@ module "vpn" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 3.2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.2.0 |
 
 ## Modules
 
@@ -254,11 +255,11 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_ec2_client_vpn_endpoint_arn"></a> [ec2\_client\_vpn\_endpoint\_arn](#output\_ec2\_client\_vpn\_endpoint\_arn) | n/a |
-| <a name="output_ec2_client_vpn_endpoint_id"></a> [ec2\_client\_vpn\_endpoint\_id](#output\_ec2\_client\_vpn\_endpoint\_id) | n/a |
-| <a name="output_ec2_client_vpn_network_associations"></a> [ec2\_client\_vpn\_network\_associations](#output\_ec2\_client\_vpn\_network\_associations) | n/a |
-| <a name="output_security_group_description"></a> [security\_group\_description](#output\_security\_group\_description) | n/a |
-| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
-| <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | n/a |
-| <a name="output_security_group_vpc_id"></a> [security\_group\_vpc\_id](#output\_security\_group\_vpc\_id) | n/a |
+| <a name="output_ec2_client_vpn_endpoint_arn"></a> [ec2\_client\_vpn\_endpoint\_arn](#output\_ec2\_client\_vpn\_endpoint\_arn) | The ARN of the Client VPN endpoint |
+| <a name="output_ec2_client_vpn_endpoint_id"></a> [ec2\_client\_vpn\_endpoint\_id](#output\_ec2\_client\_vpn\_endpoint\_id) | The ID of the Client VPN endpoint |
+| <a name="output_ec2_client_vpn_network_associations"></a> [ec2\_client\_vpn\_network\_associations](#output\_ec2\_client\_vpn\_network\_associations) | Network associations for AWS Client VPN endpoint |
+| <a name="output_security_group_description"></a> [security\_group\_description](#output\_security\_group\_description) | Security group description |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | A map of tags to add to all resources |
+| <a name="output_security_group_name"></a> [security\_group\_name](#output\_security\_group\_name) | Name of the security group |
+| <a name="output_security_group_vpc_id"></a> [security\_group\_vpc\_id](#output\_security\_group\_vpc\_id) | VPC ID |
 <!-- END_TF_DOCS -->
