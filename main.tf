@@ -62,6 +62,7 @@ resource "aws_security_group" "this" {
 
 resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   description            = var.endpoint_name
+  vpc_id                 = var.endpoint_vpc_id
   server_certificate_arn = aws_acm_certificate.this.arn
   client_cidr_block      = var.endpoint_client_cidr_block
   split_tunnel           = var.enable_split_tunnel
