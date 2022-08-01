@@ -204,8 +204,8 @@ module "vpn" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.2.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.24.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.1 |
 
 ## Modules
 
@@ -236,6 +236,7 @@ No modules.
 | <a name="input_additional_routes"></a> [additional\_routes](#input\_additional\_routes) | A map where the key is a subnet ID of endpoint subnet for network association and value is a cidr to where traffic should be routed from that subnet. Useful in cases if you need to route beyond the VPC subnet, for instance peered VPC | `map(string)` | `{}` | no |
 | <a name="input_authorization_rules"></a> [authorization\_rules](#input\_authorization\_rules) | Map containing authorization rule configuration. rule\_name = "target\_network\_cidr, access\_group\_id" . | `map(string)` | `{}` | no |
 | <a name="input_authorization_rules_all_groups"></a> [authorization\_rules\_all\_groups](#input\_authorization\_rules\_all\_groups) | Map containing authorization rule configuration with authorize\_all\_groups=true. rule\_name = "target\_network\_cidr" . | `map(string)` | `{}` | no |
+| <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | The ARN of ACM certigicate to use for the VPN server config. | `string` | `null` | no |
 | <a name="input_cloudwatch_log_group_name_prefix"></a> [cloudwatch\_log\_group\_name\_prefix](#input\_cloudwatch\_log\_group\_name\_prefix) | Specifies the name prefix of CloudWatch Log Group for VPC flow logs. | `string` | `"/aws/client-vpn-endpoint/"` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | Specifies the number of days you want to retain log events in the specified log group for VPN connection logs. | `number` | `30` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS servers to be used for DNS resolution. A Client VPN endpoint can have up to two DNS servers. If no DNS server is specified, the DNS address of the connecting device is used. Conflict with `use_vpc_internal_dns` | `list(string)` | `[]` | no |
@@ -246,8 +247,8 @@ No modules.
 | <a name="input_endpoint_vpc_id"></a> [endpoint\_vpc\_id](#input\_endpoint\_vpc\_id) | VPC where the VPN will be connected. | `string` | n/a | yes |
 | <a name="input_saml_provider_arn"></a> [saml\_provider\_arn](#input\_saml\_provider\_arn) | The ARN of the IAM SAML identity provider. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
-| <a name="input_tls_subject_common_name"></a> [tls\_subject\_common\_name](#input\_tls\_subject\_common\_name) | The common\_name for subject for which a certificate is being requested. RFC5280. | `string` | n/a | yes |
-| <a name="input_tls_validity_period_hours"></a> [tls\_validity\_period\_hours](#input\_tls\_validity\_period\_hours) | Specifies the number of hours after initial issuing that the certificate will become invalid. | `number` | `47400` | no |
+| <a name="input_tls_subject_common_name"></a> [tls\_subject\_common\_name](#input\_tls\_subject\_common\_name) | The common\_name for subject for which a certificate is being requested. RFC5280. Not used if certificate\_arn provided. | `string` | `"vpn.example.com"` | no |
+| <a name="input_tls_validity_period_hours"></a> [tls\_validity\_period\_hours](#input\_tls\_validity\_period\_hours) | Specifies the number of hours after initial issuing that the certificate will become invalid.  Not used if certificate\_arn provided. | `number` | `47400` | no |
 | <a name="input_transport_protocol"></a> [transport\_protocol](#input\_transport\_protocol) | The transport protocol to be used by the VPN session. | `string` | `"udp"` | no |
 | <a name="input_use_vpc_internal_dns"></a> [use\_vpc\_internal\_dns](#input\_use\_vpc\_internal\_dns) | Use VPC Internal DNS as is DNS servers | `bool` | `true` | no |
 
