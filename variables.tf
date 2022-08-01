@@ -9,11 +9,6 @@ variable "saml_provider_arn" {
   type        = string
 }
 
-variable "tls_subject_common_name" {
-  description = "The common_name for subject for which a certificate is being requested. RFC5280."
-  type        = string
-}
-
 variable "endpoint_client_cidr_block" {
   description = "The IPv4 address range, in CIDR notation, from which to assign client IP addresses. The address range cannot overlap with the local CIDR of the VPC in which the associated subnet is located, or the routes that you add manually. The address range cannot be changed after the Client VPN endpoint has been created. The CIDR block should be /22 or greater."
   type        = string
@@ -65,8 +60,20 @@ variable "cloudwatch_log_group_retention_in_days" {
   default     = 30
 }
 
+variable "certificate_arn" {
+  description = "The ARN of ACM certigicate to use for the VPN server config."
+  type        = string
+  default     = null
+}
+
+variable "tls_subject_common_name" {
+  description = "The common_name for subject for which a certificate is being requested. RFC5280. Not used if certificate_arn provided."
+  type        = string
+  default     = "vpn.example.com"
+}
+
 variable "tls_validity_period_hours" {
-  description = "Specifies the number of hours after initial issuing that the certificate will become invalid."
+  description = "Specifies the number of hours after initial issuing that the certificate will become invalid.  Not used if certificate_arn provided."
   type        = number
   default     = 47400
 }

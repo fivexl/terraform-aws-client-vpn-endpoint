@@ -1,11 +1,17 @@
+locals {
+  create_self_signed_cert = var.certificate_arn == null ? true : false
+}
+
 # A Client VPN endpoint supports 1024-bit and 2048-bit RSA key sizes only.
 resource "tls_private_key" "this" {
+  count     = local.create_self_signed_cert ? 1 : 0
   algorithm = "RSA"
   rsa_bits  = 2048
 }
 
 resource "tls_self_signed_cert" "this" {
-  private_key_pem = tls_private_key.this.private_key_pem
+  count           = local.create_self_signed_cert ? 1 : 0
+  private_key_pem = tls_private_key.this[0].private_key_pem
   subject {
     common_name = var.tls_subject_common_name
   }
@@ -22,8 +28,9 @@ resource "tls_self_signed_cert" "this" {
 }
 
 resource "aws_acm_certificate" "this" {
-  private_key      = tls_private_key.this.private_key_pem
-  certificate_body = tls_self_signed_cert.this.cert_pem
+  count            = local.create_self_signed_cert ? 1 : 0
+  private_key      = tls_private_key.this[0].private_key_pem
+  certificate_body = tls_self_signed_cert.this[0].cert_pem
   tags = merge(
     {
       Name = var.tls_subject_common_name
@@ -63,7 +70,7 @@ resource "aws_security_group" "this" {
 resource "aws_ec2_client_vpn_endpoint" "this_sso" {
   description            = var.endpoint_name
   vpc_id                 = var.endpoint_vpc_id
-  server_certificate_arn = aws_acm_certificate.this.arn
+  server_certificate_arn = var.certificate_arn != null ? var.certificate_arn : aws_acm_certificate.this[0].arn
   client_cidr_block      = var.endpoint_client_cidr_block
   split_tunnel           = var.enable_split_tunnel
   transport_protocol     = var.transport_protocol
