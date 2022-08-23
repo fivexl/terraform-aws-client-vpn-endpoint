@@ -26,8 +26,8 @@ variable "endpoint_name" {
 }
 
 variable "endpoint_subnets" {
-  description = "List of IDs of endpoint subnets for network association"
-  type        = list(string)
+  description = "List of IDs of endpoint subnets for network association, changed to string VJ"
+  type        = string
 }
 
 variable "additional_routes" {
