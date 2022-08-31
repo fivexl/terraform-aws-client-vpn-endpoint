@@ -119,6 +119,7 @@ resource "aws_ec2_client_vpn_route" "this_sso" {
   for_each               = var.additional_routes
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
   destination_cidr_block = each.value
-  target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.key].subnet_id
+  #target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.key].subnet_id
+  target_vpc_subnet_id   = each.key
   description            = "From ${each.key} to ${each.value}"
 }
