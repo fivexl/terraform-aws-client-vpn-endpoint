@@ -197,7 +197,7 @@ module "vpn" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | => 4.0 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 3.2.0 |
 
 ## Providers
