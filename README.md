@@ -233,7 +233,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_routes"></a> [additional\_routes](#input\_additional\_routes) | A map where the key is a subnet ID of endpoint subnet for network association and value is a cidr to where traffic should be routed from that subnet. Useful in cases if you need to route beyond the VPC subnet, for instance peered VPC | `map(string)` | `{}` | no |
+| <a name="input_additional_routes"></a> [additional\_routes](#input\_additional\_routes) | A list of maps where each map contains a subnet ID of endpoint subnet for network association and a list of cidrs to where traffic should be routed from that subnet. Useful in cases if you need to route beyond the VPC subnet, for instance peered VPC | `list(map(string))` | `{}` | no |
 | <a name="input_authorization_rules"></a> [authorization\_rules](#input\_authorization\_rules) | Map containing authorization rule configuration. rule\_name = "target\_network\_cidr, access\_group\_id" . | `map(string)` | `{}` | no |
 | <a name="input_authorization_rules_all_groups"></a> [authorization\_rules\_all\_groups](#input\_authorization\_rules\_all\_groups) | Map containing authorization rule configuration with authorize\_all\_groups=true. rule\_name = "target\_network\_cidr" . | `map(string)` | `{}` | no |
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | The ARN of ACM certigicate to use for the VPN server config. | `string` | `null` | no |
