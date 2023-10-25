@@ -20,15 +20,15 @@ output "security_group_vpc_id" {
 
 output "ec2_client_vpn_endpoint_id" {
   description = "The ID of the Client VPN endpoint"
-  value       = aws_ec2_client_vpn_endpoint.this_sso.id
+  value       = try(aws_ec2_client_vpn_endpoint.this_sso[0].id, null)
 }
 
 output "ec2_client_vpn_endpoint_arn" {
   description = "The ARN of the Client VPN endpoint"
-  value       = aws_ec2_client_vpn_endpoint.this_sso.arn
+  value       = try(aws_ec2_client_vpn_endpoint.this_sso[0].arn, null)
 }
 
 output "ec2_client_vpn_network_associations" {
   description = "Network associations for AWS Client VPN endpoint"
-  value       = aws_ec2_client_vpn_network_association.this_sso
+  value       = { for k, v in aws_ec2_client_vpn_network_association.this_sso : k => v }
 }

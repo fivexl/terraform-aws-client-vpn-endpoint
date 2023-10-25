@@ -15,6 +15,12 @@ variable "endpoint_client_cidr_block" {
   default     = "10.100.100.0/24"
 }
 
+variable "create_endpoint" {
+  description = "Create Client VPN Endpoint"
+  type        = bool
+  default     = true
+}
+
 variable "endpoint_name" {
   description = "Name to be used on the Client VPN Endpoint"
   type        = string
