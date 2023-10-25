@@ -68,6 +68,7 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_ec2_client_vpn_endpoint" "this_sso" {
+  count                  = var.create_endpoint ? 1 : 0
   description            = var.endpoint_name
   vpc_id                 = var.endpoint_vpc_id
   server_certificate_arn = var.certificate_arn != null ? var.certificate_arn : aws_acm_certificate.this[0].arn
@@ -94,38 +95,38 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
 }
 
 resource "aws_ec2_client_vpn_network_association" "this_sso" {
-  for_each               = toset(var.endpoint_subnets)
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
+  for_each               = var.create_endpoint ? toset(var.endpoint_subnets) : toset([])
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   subnet_id              = each.value
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_sso_to_dns" {
-  count                  = var.use_vpc_internal_dns ? 1 : 0
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
+  count                  = var.create_endpoint && var.use_vpc_internal_dns ? 1 : 0
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   target_network_cidr    = "${cidrhost(data.aws_vpc.this.cidr_block, 2)}/32"
   authorize_all_groups   = true
   description            = "Authorization for ${var.endpoint_name} to DNS"
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "this" {
-  for_each               = var.authorization_rules
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
+  for_each               = var.create_endpoint ? var.authorization_rules : {}
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   target_network_cidr    = split(",", each.value)[0]
   access_group_id        = split(",", each.value)[1]
   description            = "Rule name: ${each.key}"
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "this_all_groups" {
-  for_each               = var.authorization_rules_all_groups
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
+  for_each               = var.create_endpoint ? var.authorization_rules_all_groups : {}
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   target_network_cidr    = each.value
   authorize_all_groups   = true
   description            = "Rule name: ${each.key}"
 }
 
 resource "aws_ec2_client_vpn_route" "this_sso" {
-  for_each               = var.additional_routes
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso.id
+  for_each               = var.create_endpoint ? var.additional_routes : {}
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   destination_cidr_block = each.value
   target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.key].subnet_id
   description            = "From ${each.key} to ${each.value}"
