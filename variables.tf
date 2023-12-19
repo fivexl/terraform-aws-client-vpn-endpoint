@@ -32,9 +32,9 @@ variable "endpoint_subnets" {
 }
 
 variable "additional_routes" {
-  description = "A map where the key is a subnet ID of endpoint subnet for network association and value is a cidr to where traffic should be routed from that subnet. Useful in cases if you need to route beyond the VPC subnet, for instance peered VPC"
-  type        = map(string)
-  default     = {}
+  description = "A list of maps where each map contains a subnet ID of endpoint subnet for network association and a cidr to where traffic should be routed from that subnet."
+  type        = list(map(string))
+  default     = []
 }
 
 variable "endpoint_vpc_id" {

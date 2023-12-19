@@ -125,9 +125,9 @@ resource "aws_ec2_client_vpn_authorization_rule" "this_all_groups" {
 }
 
 resource "aws_ec2_client_vpn_route" "this_sso" {
-  for_each               = var.create_endpoint ? var.additional_routes : {}
+  for_each               = var.create_endpoint ? { for r in var.additional_routes : "${r.subnet_id}:${r.destination_cidr_block}" => r } : {}
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
-  destination_cidr_block = each.value
-  target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.key].subnet_id
-  description            = "From ${each.key} to ${each.value}"
+  destination_cidr_block = each.value.destination_cidr_block
+  target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.value.subnet_id].subnet_id
+  description            = "From ${each.value.subnet_id} to ${each.value.destination_cidr_block}"
 }
