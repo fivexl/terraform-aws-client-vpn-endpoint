@@ -95,7 +95,7 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
 }
 
 resource "aws_ec2_client_vpn_network_association" "this_sso" {
-  for_each               = var.create_endpoint ? toset(var.endpoint_subnets) : toset([])
+  for_each               = var.create_endpoint ? var.endpoint_subnets : toset([])
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   subnet_id              = each.value
 }
