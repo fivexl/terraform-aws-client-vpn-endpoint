@@ -95,7 +95,7 @@ resource "aws_ec2_client_vpn_endpoint" "this_sso" {
 }
 
 resource "aws_ec2_client_vpn_network_association" "this_sso" {
-  for_each               = var.create_endpoint ? var.endpoint_subnets : toset([])
+  for_each               = toset([ for subnet in var.endpoint_subnets : subnet if var.create_endpoint])
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.this_sso[0].id
   subnet_id              = each.value
 }
@@ -131,3 +131,6 @@ resource "aws_ec2_client_vpn_route" "this_sso" {
   target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.value.subnet_id].subnet_id
   description            = "From ${each.value.subnet_id} to ${each.value.destination_cidr_block}"
 }
+
+
+
