@@ -131,6 +131,3 @@ resource "aws_ec2_client_vpn_route" "this_sso" {
   target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.this_sso[each.value.subnet_id].subnet_id
   description            = "From ${each.value.subnet_id} to ${each.value.destination_cidr_block}"
 }
-
-
-
